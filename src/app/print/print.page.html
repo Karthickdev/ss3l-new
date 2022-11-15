@@ -1,0 +1,27 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title style="font-size: 25px;">PRINTING</ion-title>
+    <ion-buttons slot="start" (click)="back()">
+      <ion-icon name="arrow-back-outline" style="font-size: 25px;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="btns">
+    <ion-row>
+      <ion-col size="4"></ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" color="medium" (click)="createPdf()">Create & Print PDF</ion-button>
+      </ion-col>
+      <ion-col size="4"></ion-col>
+    </ion-row>
+    <ion-row *ngIf="isSingleItem">
+      <ion-col size="4"></ion-col>
+      <ion-col size="4">
+        <ion-button expand="block" color="medium" (click)="gotoTracking()">Skip</ion-button>
+      </ion-col>
+      <ion-col size="4"></ion-col>
+    </ion-row>
+  </div>
+</ion-content>

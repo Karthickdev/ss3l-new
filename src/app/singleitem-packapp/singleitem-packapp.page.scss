@@ -1,0 +1,43 @@
+ion-toolbar{
+    --background: #C3DBB7;
+    font-size: 25px;
+}
+
+.itemDetails{
+    text-align: center;
+    background-color: #C3DBB7;
+    font-weight: bold;
+}
+
+.bagIcon{
+    font-size: 65px;
+    color: green;
+}
+
+.bag{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.items{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.marginTL10 {
+  margin: 2% 3%;
+}
+
+.itemRow{
+    color: green;
+}
+
+ion-content{
+    font-size: 25px;
+}
+
+.label{
+    font-weight: bold;
+}

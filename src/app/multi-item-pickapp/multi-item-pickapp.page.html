@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title style="font-size: 25px;">MULTI ITEM ORDER SCAN</ion-title>
+    <ion-buttons slot="start" (click)="back()">
+      <ion-icon name="arrow-back-outline" style="font-size: 25px;"></ion-icon>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-row>
+    <ion-col>
+      <ion-item style="--padding-end: 15px;font-size: 20px;">
+        <ion-label position="floating">PO#</ion-label>
+        <ion-input [(ngModel)]="poNumber" (ionInput)="getMultiItem()"></ion-input>
+      </ion-item>
+
+    </ion-col>
+  </ion-row>
+  <div style="margin: 10% 2% 0% 2%;" *ngIf="itemDetails.length > 0">
+    <ion-row class="itemDetails">
+      <ion-col size="3">
+        <ion-label>Item Name</ion-label>
+      </ion-col>
+      <ion-col size="3">
+        <ion-label>UPC</ion-label>
+      </ion-col>
+      <ion-col size="3">
+        <ion-label>Qty Picked / Unpicked</ion-label>
+      </ion-col>
+      <ion-col size="3">
+        <ion-label>UPC</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngFor="let item of itemDetails; let i = index">
+      <ion-col size="3">
+        <ion-label>{{item.itemName}}</ion-label>
+      </ion-col>
+      <ion-col size="3" class="items">
+        <ion-input style="border: 1px solid grey;border-radius: 5px;" [(ngModel)]="item.scanUPC"
+          (ionInput)="validateUpc(item)">
+        </ion-input>
+      </ion-col>
+      <ion-col size="3" class="items">
+        <ion-label>{{item.unpicked}} / {{item.quantity}}</ion-label>
+      </ion-col>
+      <ion-col size="3" class="items">
+        <ion-label>{{item.upc}}</ion-label>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
+<ion-footer>
+  <ion-toolbar style="--background: #ffff">
+    <ion-row>
+      <ion-col size="12">
+        <ion-label position="stacked" class="event-font marginTL10">Event Log</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item class="ion-padding-horizontal">
+          <ion-textarea style="font-size: 25px;" rows="6" [readonly]='true' [(ngModel)]="eventLog"
+            class="event-font-italic"></ion-textarea>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-toolbar>
+</ion-footer>

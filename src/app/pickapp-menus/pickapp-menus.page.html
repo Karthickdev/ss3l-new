@@ -1,0 +1,58 @@
+<ion-header class="class-headerimg">
+  <div class="ion-text-center ion-text-uppercase title"></div>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="ion-padding ion-text-center">
+  </div>
+  <ion-grid>
+    <ion-row class="ion-margin-vertical ion-padding-vertical">
+      <ion-col size="1" class="ion-padding-vertical ion-text-center"></ion-col>
+      <ion-col size="2" class="ion-padding-vertical ion-text-center" style="padding-right: 0"
+        (click)="gotosingleitemscan()">
+        <ion-button size="large" class="ion-text-uppercase btn-height" color="dark" fill="outline"
+          style="background: #C3DBB7">
+          <ion-thumbnail class="scanner-svg">
+            <img src="../../assets/icon/barcode.png">
+          </ion-thumbnail>
+        </ion-button>
+      </ion-col>
+      <ion-col size="8" class="ion-padding-vertical ion-text-center" style="padding-left: 0"
+        (click)="gotosingleitemscan()">
+        <ion-button size="large" class="ion-text-uppercase btn-height" color="dark" fill="outline"
+          style="background: #C3DBB7">
+          SINGLE ITEM ORDER SCAN
+        </ion-button>
+      </ion-col>
+      <ion-col size="1" class="ion-padding-vertical ion-text-center"></ion-col>
+      <ion-col size="1" class="ion-padding-vertical ion-text-center"></ion-col>
+      <ion-col size="2" class="ion-padding-vertical ion-text-center" style="padding-right: 0"
+        (click)="gotomultiItemscan()">
+        <ion-button size="large" class="ion-text-uppercase btn-height" color="dark" fill="outline"
+          style="background: #00BFCC">
+          <ion-thumbnail class="scanner-svg">
+            <img src="../../assets/icon/barcode.png">
+          </ion-thumbnail>
+        </ion-button>
+      </ion-col>
+      <ion-col size="8" class="ion-padding-vertical ion-text-center" style="padding-left: 0"
+        (click)="gotomultiItemscan()">
+        <ion-button size="large" class="ion-text-uppercase btn-height" color="dark" fill="outline"
+          style="background: #00BFCC">
+          MULTI-ITEM OREDER SCAN
+        </ion-button>
+      </ion-col>
+      <ion-col size="1" class="ion-padding-vertical ion-text-center"></ion-col>
+      <ion-col size="8" class="ion-padding-vertical ion-text-center"></ion-col>
+      <ion-col size="3" class="ion-padding-vertical ion-text-center" (click)="gotohome()">
+        <ion-button size="large" class="ion-text-uppercase btn-height" color="dark" fill="outline"
+          style="background: #ffffff">
+          <ion-thumbnail class="scanner-svg">
+            <img src="../../assets/icon/home.png">
+          </ion-thumbnail>
+        </ion-button>
+      </ion-col>
+      <ion-col size="1" class="ion-padding-vertical ion-text-center"></ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>

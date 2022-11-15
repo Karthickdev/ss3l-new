@@ -1,0 +1,34 @@
+<ion-header class="class-headerimg">
+  <div class="ion-text-center ion-text-uppercase" class="title"></div>
+</ion-header>
+<ion-content>
+  <div class="loginForm">
+    <ion-row>
+      <ion-col size="2"></ion-col>
+      <ion-col size="8">
+        <ion-item>
+          <ion-label position="floating">User Id</ion-label>
+          <ion-input [(ngModel)]="userName"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="2"></ion-col>
+      <ion-col size="8">
+        <ion-item>
+          <ion-label position="floating">Password</ion-label>
+          <ion-input [(ngModel)]="password"></ion-input>
+        </ion-item>
+      </ion-col>
+      <ion-col size="2"></ion-col>
+    </ion-row>
+  </div>
+  <ion-row style="text-align: center;">
+    <ion-col size="4"></ion-col>
+    <ion-col size="4">
+      <ion-button (click)="login()">LOGIN</ion-button>
+    </ion-col>
+    <ion-col size="4"></ion-col>
+  </ion-row>
+</ion-content>

@@ -1,0 +1,7 @@
+{
+  "name": "southShore3pl",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
