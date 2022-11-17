@@ -11,24 +11,32 @@
 </ion-header>
 
 <ion-content>
-  <ion-row>
-    <ion-col>
-      <ion-item style="--padding-end: 15px;font-size: 20px;">
+  <ion-row class="row-padd">
+    <ion-col size="11">
+      <ion-item style="--padding-end: 15px;font-size: 18px;">
         <ion-label position="floating">UPC</ion-label>
-        <ion-input [(ngModel)]="upcCode" (ionInput)="handleScanner()"></ion-input>
+        <ion-input #upcInput [(ngModel)]="upcCode" (keyup.enter)="handleScanner()"></ion-input>
       </ion-item>
     </ion-col>
+    <ion-col size="1" class="searchIcon">
+      <ion-buttons>
+        <ion-button fill="clear" (click)="handleScanner()" type="button" [disabled]="searched" item-right
+          style="background:white;">
+          <ion-icon name="search" style="width: 35px; height: 35px; color:darkgray"> </ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-col>
   </ion-row>
-  <div *ngIf="packAppDetails">
+  <div *ngIf="showDetails">
     <ion-row>
-      <ion-col size="2">
-        <ion-label class="label">PO#</ion-label>
+      <ion-col size="2" style="text-align: right;">
+        <ion-label class="label">PO#:</ion-label>
       </ion-col>
       <ion-col size="4">
         <ion-label>{{packAppDetails.purchaseOrderNumber}}</ion-label>
       </ion-col>
-      <ion-col size="3">
-        <ion-label class="label">ORDER DATE</ion-label>
+      <ion-col size="3" style="text-align: right;">
+        <ion-label class="label">ORDER DATE:</ion-label>
       </ion-col>
       <ion-col size="3">
         <ion-label>{{packAppDetails.orderCreatedDateString}}</ion-label>
@@ -36,8 +44,8 @@
     </ion-row>
     <br>
     <ion-row>
-      <ion-col size="4">
-        <ion-label class="label">CARRIER / METHOD</ion-label>
+      <ion-col size="4" style="text-align: center;">
+        <ion-label class="label" style="margin-left: 25%;">CARRIER / METHOD:</ion-label>
       </ion-col>
       <ion-col size="8">
         <ion-label>{{packAppDetails.shippingCarrier}}</ion-label>
@@ -45,8 +53,8 @@
     </ion-row>
     <br>
     <ion-row>
-      <ion-col size="4">
-        <ion-label class="label">SHIP TO ADDRESS</ion-label>
+      <ion-col size="4" style="text-align: center;">
+        <ion-label class="label" style="margin-left: 25%;">SHIP TO ADDRESS:</ion-label>
       </ion-col>
       <ion-col size="4">
         <ion-label>{{packAppDetails.address}}</ion-label>
@@ -55,7 +63,7 @@
     </ion-row>
   </div>
   <br>
-  <div style="margin: 10% 2% 0% 2%;" *ngIf="packAppDetails">
+  <div style="margin: 10% 2% 0% 2%;" *ngIf="showDetails">
     <ion-row class="itemDetails">
       <ion-col size="3">
         <ion-label>Item Name</ion-label>
@@ -64,35 +72,35 @@
         <ion-label>UPC</ion-label>
       </ion-col>
       <ion-col size="3">
-        <ion-label>Qty Picked / Unpicked</ion-label>
+        <ion-label>Qty Packed / Unpacked</ion-label>
       </ion-col>
       <ion-col size="3">
-        <ion-label>UPC</ion-label>
+        <ion-label>UPC Number</ion-label>
       </ion-col>
     </ion-row>
-    <ion-row class="items">
+    <ion-row class="items" *ngFor="let item of itemDetails">
       <ion-col size="3">
-        <ion-label [ngClass]="isScanned ? 'itemRow' : '' ">{{itemDetails[0].itemName}}</ion-label>
+        <ion-label [ngClass]="item.isScanned ? 'itemRow' : '' ">{{item.itemName}}</ion-label>
       </ion-col>
       <ion-col size="3">
-        <ion-input style="border: 1px solid grey;border-radius: 5px;" [(ngModel)]="upc" (ionInput)="handleUpcScanner()">
+        <ion-input style="border: 1px solid grey;border-radius: 5px;" [(ngModel)]="item.scanUpc" (keyup.enter)="handleUpcScanner(item)">
         </ion-input>
       </ion-col>
       <ion-col size="3">
-        <ion-label [ngClass]="isScanned ? 'itemRow' : '' ">{{itemDetails[0].unpicked}} / {{itemDetails[0].quantity}}
+        <ion-label [ngClass]="item.isScanned ? 'itemRow' : '' ">{{item.unpicked}} / {{item.quantity}}
         </ion-label>
       </ion-col>
       <ion-col size="3">
-        <ion-label [ngClass]="isScanned ? 'itemRow' : '' ">{{itemDetails[0].upc}}</ion-label>
+        <ion-label [ngClass]="item.isScanned ? 'itemRow' : '' ">{{item.upc}}</ion-label>
       </ion-col>
     </ion-row>
   </div>
   <ion-row class="bag" *ngIf="showBag">
     <ion-col size="4"></ion-col>
-    <ion-col size="4">
-      <ion-label class="label">Select Bag to proceed</ion-label>
+    <ion-col size="4" style="text-align: right;">
+      <ion-label class="label">Once the bag has been added click the bag icon to proceed</ion-label>
     </ion-col>
-    <ion-col size="4" (click)="updateOrder()">
+    <ion-col size="4" (click)="addBag()">
       <ion-icon name="bag-handle" class="bagIcon"></ion-icon>
     </ion-col>
   </ion-row>
@@ -107,7 +115,7 @@
     <ion-row>
       <ion-col size="12">
         <ion-item class="ion-padding-horizontal">
-          <ion-textarea style="font-size: 20px;" rows="6" [readonly]='true' [(ngModel)]="eventLog"
+          <ion-textarea style="font-size: 15px;" rows="6" [readonly]='false' [(ngModel)]="eventLog"
             class="event-font-italic"></ion-textarea>
         </ion-item>
       </ion-col>

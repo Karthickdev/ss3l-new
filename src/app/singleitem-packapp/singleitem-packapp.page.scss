@@ -10,7 +10,7 @@ ion-toolbar{
 }
 
 .bagIcon{
-    font-size: 65px;
+    font-size: 45px;
     color: green;
 }
 
@@ -35,9 +35,18 @@ ion-toolbar{
 }
 
 ion-content{
-    font-size: 25px;
+    --overflow: hidden;
 }
 
 .label{
     font-weight: bold;
 }
+.row-padd{
+    padding: 0.5% 3%;
+  }
+  .searchIcon{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }

@@ -11,7 +11,7 @@ $height100: 100%;
 }
 
 .loginForm{
-    margin-top: 25%;
+    margin-top: 10%;
 }
 
 ion-grid {
@@ -25,6 +25,10 @@ ion-row {
 
 ion-col {
 	background: $white-color;
+}
+
+ion-content{
+	--overflow: hidden;
 }
 
 .loggbtn{

@@ -14,10 +14,17 @@ import { AlertController } from '@ionic/angular';
 export class PrintPage implements OnInit {
 
   isSingleItem: any;
+  showSkip = true;
   constructor(private router: Router, private file: File, private fileOpener: FileOpener, private printer: Printer, private authService: ApiserviceService,
     private alertCtrl: AlertController, private activatedRoute: ActivatedRoute) {
     this.activatedRoute.queryParams.subscribe((res) => {
       this.isSingleItem = res.value;
+      console.log(this.isSingleItem);
+      if(this.isSingleItem == "false"){
+        this.showSkip = false;
+      }else{
+        this.showSkip = true;
+      }
     })
   }
 
@@ -25,7 +32,7 @@ export class PrintPage implements OnInit {
   }
 
   back() {
-    if (this.isSingleItem) {
+    if (this.isSingleItem == "true") {
       this.router.navigate(['/singleitem-packapp']);
     } else {
       this.router.navigate(['/multiitem-packapp']);
@@ -38,23 +45,31 @@ export class PrintPage implements OnInit {
   }
 
   createPdf() {
+    
     const writeDirectory = this.file.externalDataDirectory
-    let filename = this.authService.packAppDetail.attachmentList.name;
-    let pdf = this.authService.packAppDetail.attachmentList.file;
-    let mimeType = this.authService.packAppDetail.attachmentList.mimeType;
+    let filename = this.authService.packAppDetail.attachmentList[0].name;
+    let pdf = this.authService.packAppDetail.content[0];
+    let mimeType = this.authService.packAppDetail.attachmentList[0].mimeType;
     this.file.writeFile(writeDirectory, filename + '.pdf', this.convertBase64ToBlob(pdf, mimeType), { replace: true })
       .then(() => {
-        this.printer.print(writeDirectory + filename + '.pdf', { name: filename + '.pdf', orientation: 'portrait', printer: 'ipp://' + this.authService.network }).then(onSuccess => {
-          if (this.isSingleItem) {
-            this.router.navigate(['/tracking']);
-          } else {
-            this.updateOrder();
-          }
-        }).catch(err => {
-          this.showAlert(err + ' printErr');
-        })
+        this.fileOpener.open(writeDirectory + filename+'.pdf', 'application/pdf').then(()=>{
+
+        }).catch((err) => {
+        this.showAlert(err + ' fileopen err');
+        console.error('Error open pdf file');
+      });
+        // this.printer.print(writeDirectory + filename + '.pdf', { name: filename + '.pdf', orientation: 'portrait', printer: 'ipp://' + this.authService.network }).then(onSuccess => {
+        //   if (this.isSingleItem) {
+        //     this.router.navigate(['/tracking']);
+        //   } else {
+        //     this.updateOrder();
+        //   }
+        // }).catch(err => {
+        //   this.showAlert(err + ' printErr');
+        // })
       })
-      .catch(() => {
+      .catch((err) => {
+        this.showAlert(err + ' printErr');
         console.error('Error writing pdf file');
       });
   }

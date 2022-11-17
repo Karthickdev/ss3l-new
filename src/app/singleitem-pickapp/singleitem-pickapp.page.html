@@ -7,14 +7,21 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-row>
-    <ion-col>
-      <ion-item style="--padding-end: 15px;font-size: 20px;">
+<ion-content class="ion-no-padding">
+  <ion-row class="row-padd">
+    <ion-col size="11">
+      <ion-item style="--padding-end: 15px;font-size: 18px;">
         <ion-label position="floating">PO#</ion-label>
-        <ion-input [(ngModel)]="poNumber" (ionInput)="handleScanner()"></ion-input>
+        <ion-input #po [(ngModel)]="poNumber" (keyup.enter)="handleScanner()"></ion-input>
       </ion-item>
-
+    </ion-col>
+    <ion-col size="1" class="searchIcon">
+      <ion-buttons>
+        <ion-button fill="clear" (click)="handleScanner()" type="button" [disabled]="searched" item-right
+          style="background:white;">
+          <ion-icon name="search" style="width: 35px; height: 35px; color:darkgray"> </ion-icon>
+        </ion-button>
+      </ion-buttons>
     </ion-col>
   </ion-row>
   <div style="margin: 10% 2% 0% 2%;" *ngIf="itemDetails.length > 0">
@@ -29,40 +36,38 @@
         <ion-label>Qty Picked / Unpicked</ion-label>
       </ion-col>
       <ion-col size="3">
-        <ion-label>UPC</ion-label>
+        <ion-label>UPC Number</ion-label>
       </ion-col>
     </ion-row>
-    <ion-row class="items">
+    <ion-row class="items" *ngFor="let item of itemDetails">
       <ion-col size="3">
-        <ion-label>{{itemDetails[0].itemName}}</ion-label>
+        <ion-label>{{item.itemName}}</ion-label>
       </ion-col>
       <ion-col size="3">
-        <ion-input style="border: 1px solid grey;border-radius: 5px;" [(ngModel)]="upc" (ionInput)="handleUpcScanner()">
+        <ion-input style="border: 1px solid grey;border-radius: 5px;" [(ngModel)]="item.scanUpc" (keyup.enter)="handleUpcScanner(item)">
         </ion-input>
       </ion-col>
       <ion-col size="3">
-        <ion-label>{{itemDetails[0].unpicked}} / {{itemDetails[0].quantity}}</ion-label>
+        <ion-label>{{item.unpicked}} / {{item.quantity}}</ion-label>
       </ion-col>
       <ion-col size="3">
-        <ion-label>{{itemDetails[0].upc}}</ion-label>
+        <ion-label>{{item.upc}}</ion-label>
       </ion-col>
     </ion-row>
   </div>
 </ion-content>
-<ion-footer>
-  <ion-toolbar style="--background: #ffff">
-    <ion-row>
-      <ion-col size="12">
-        <ion-label position="stacked" class="event-font marginTL10">Event Log</ion-label>
-      </ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col size="12">
-        <ion-item class="ion-padding-horizontal">
-          <ion-textarea style="font-size: 20px;" rows="6" [readonly]='true' [(ngModel)]="eventLog"
-            class="event-font-italic"></ion-textarea>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-  </ion-toolbar>
+<ion-footer style="overflow-y: scroll;">
+  <ion-row class="marginTL10">
+    <ion-col size="12">
+      <ion-label position="stacked" class="event-font marginTL10">Event Log</ion-label>
+    </ion-col>
+  </ion-row>
+  <!-- <ion-textarea rows="3" [(ngModel)]="eventLog" [readonly]='true' class="event-font-italic"></ion-textarea> -->
+  <ion-row>
+    <ion-col size="12">
+      <ion-item class="ion-padding-horizontal">
+        <ion-textarea rows="3" [(ngModel)]="eventLog" [readonly]='true' class="event-font-italic"></ion-textarea>
+      </ion-item>
+    </ion-col>
+  </ion-row>
 </ion-footer>

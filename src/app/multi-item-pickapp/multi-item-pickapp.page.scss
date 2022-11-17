@@ -19,5 +19,14 @@ ion-toolbar{
 }
 
 ion-content{
-    font-size: 25px;
+    --overflow: hidden;
 }
+.row-padd{
+    padding: 0.5% 3%;
+  }
+  .searchIcon{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }

@@ -11,7 +11,7 @@ import { NetworkInterface } from '@ionic-native/network-interface/ngx';
 })
 export class LoginPage implements OnInit {
 
-  userName: string = 'cityon';
+  userName: string = '';
   password: string = '';
   constructor(private router: Router, private authService: ApiserviceService, private network: NetworkInterface) { }
 
@@ -28,10 +28,13 @@ export class LoginPage implements OnInit {
     console.log(data);
     this.authService.requestServer(url, 'post', data).subscribe(res => {
       this.authService.dismiss();
-      console.log(res);
-      localStorage.setItem('userId', res['userId']);
-      this.authService.PresentToast('login worked', 'success');
-      this.router.navigate(['/home']);
+      if(res['status'] == "Success"){
+        localStorage.setItem('userId', res['userId']);
+        this.router.navigate(['/home']);
+      }else{
+        this.authService.PresentToast(res['message'], 'danger');
+      }
+      
     }, err => {
       this.authService.dismiss();
     })

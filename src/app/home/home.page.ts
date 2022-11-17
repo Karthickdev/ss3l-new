@@ -18,4 +18,8 @@ export class HomePage {
     this.router.navigate(['/packapp-menus']);
   }
 
+  logout(){
+    this.router.navigate(['/login']);
+  }
+
 }

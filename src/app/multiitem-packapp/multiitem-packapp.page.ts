@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiserviceService } from '../services/auth.service';
 
@@ -8,7 +8,7 @@ import { ApiserviceService } from '../services/auth.service';
   styleUrls: ['./multiitem-packapp.page.scss'],
 })
 export class MultiitemPackappPage implements OnInit {
-
+  @ViewChild('po', { static: false }) po;
   upcCode: any;
   packAppDetails: any;
   itemDetails: any;
@@ -16,9 +16,13 @@ export class MultiitemPackappPage implements OnInit {
   eventLog: string = "";
   isScanned: boolean = false;
   poNumber: any;
+  showDetails: boolean = false;
   constructor(private router: Router, private authService: ApiserviceService) { }
 
   ngOnInit() {
+    setTimeout(()=>{
+      this.po.setFocus();
+    }, 400);
   }
 
   back() {
@@ -43,13 +47,38 @@ export class MultiitemPackappPage implements OnInit {
       if (this.packAppDetails['popupMessage']['error']) {
         this.authService.PresentToast(this.packAppDetails['popupMessage']['error'], 'danger');
         this.eventLog = this.packAppDetails['popupMessage']['error'] + '\n' + this.eventLog;
+        this.poNumber = '';
+        this.showDetails = false;
+        setTimeout(()=>{
+          this.po.setFocus();
+        }, 400);
+      } else if(this.packAppDetails['apiResponse']['status'] == "Error"){
+        this.authService.PresentToast(this.packAppDetails['apiResponse']['message'], 'danger');
+        this.eventLog = this.packAppDetails['apiResponse']['message'] + '\n' + this.eventLog;
+        this.poNumber = ''
+        this.showDetails = false;
+        setTimeout(()=>{
+          this.po.setFocus();
+        }, 400);
       } else {
+        this.showDetails = true;
         this.packAppDetails.address = this.packAppDetails.shipToAddress.name1 + ', ' + this.packAppDetails.shipToAddress.address1 + ', ' + this.packAppDetails.shipToAddress.city + ', ' + this.packAppDetails.shipToAddress.state + ', ' + this.packAppDetails.shipToAddress.postalCode + ', ' + this.packAppDetails.shipToAddress.phone;
         this.itemDetails = this.packAppDetails.orderItemList;
         for (let item of this.itemDetails) {
-          item.unpicked = 0;
-          item.scanUPC = "";
-          item.isScanned = false;
+          if(item.itemScanStatusEnum == "Scanned"){
+            item.unpicked = item.quantity
+            item.quantity = 0;
+            item.isScanned = true
+            //this.updateOrder();
+          }else{
+            item.unpicked = 0;
+            item.scanUPC = "";
+            item.isScanned = false;
+          }
+        }
+        let checkScanStatus = this.itemDetails.filter(i => i.itemScanStatusEnum != "Scanned")
+        if(checkScanStatus.length == 0){
+          this.isScanned = true;
         }
         this.authService.PresentToast('PO# ' + this.poNumber + ' is scanned successfully', 'success');
         this.eventLog = 'PO# ' + this.poNumber + ' is scanned successfully' + '\n' + this.eventLog;

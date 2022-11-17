@@ -13,11 +13,35 @@ ion-toolbar{
     align-items: center;
     justify-content: center;
 }
+.event-font{
+    font-size: 18px;
+  }
+.event-font-italic{
+    font-size: 16px;
+    color: #333;
+    font-style: italic;
+  }
 
 .marginTL10 {
   margin: 2% 3%;
 }
 
-ion-content{
-    font-size: 25px;
-}
+ion-textarea {
+    overflow-y: scroll;
+        height: auto;
+        resize: none;
+  }
+
+  .row-padd{
+    padding: 0.5% 3%;
+  }
+  .searchIcon{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+  }
+
+// ion-content{
+//     --overflow: hidden;
+// }

@@ -21,7 +21,9 @@ export class TrackingPage implements OnInit {
   }
 
   back() {
-    this.router.navigate(['/print']);
+    this.router.navigate(['/singleitem-packapp'], {
+      queryParams: {value: JSON.stringify(this.orderPackageList)}
+    });
   }
 
   ionViewDidEnter() {
@@ -29,49 +31,33 @@ export class TrackingPage implements OnInit {
     this.orderPackageList = this.authService.packAppDetail.orderPackageList;
     for (let item of this.orderPackageList) {
       item.scannedQty = 0;
-      item.status = "UnScanned"
+      item.trackingNo = "";
+      item.status = "UnScanned";
+      item.isScanned = false;
     }
   }
 
-  handleUpcScanner() {
+  handleUpcScanner(item) {
     setTimeout(() => {
-      this.validateTrackingNo()
+      this.validateTrackingNo(item)
     }, 300);
   }
 
-  validateTrackingNo() {
-    if (this.trackingNumber == this.orderPackageList[0].trackingNumber) {
-      if (this.orderPackageList[0].scannedQty <= this.orderPackageList[0].itemQuantity) {
-        this.orderPackageList[0].scannedQty++;
-        this.orderPackageList[0].itemQuantity--;
-        this.authService.PresentToast('Tracking#: ' + this.trackingNumber + ' is successfully scanned', 'success');
-        this.eventLog = 'Tracking#: ' + this.trackingNumber + ' is successfully scanned' + '\n' + this.eventLog;
-        this.trackingNumber = '';
-        if (this.orderPackageList[0].itemQuantity == 0) {
-          this.isScanned = true;
-          this.orderPackageList[0].status = "Scanned";
-          this.updateOrder();
-        }
-      } else if (this.orderPackageList[0].scannedQty > this.orderPackageList[0].itemQuantity && this.orderPackageList[0].itemQuantity != 0) {
-        this.orderPackageList[0].scannedQty++;
-        this.orderPackageList[0].itemQuantity--;
-        this.authService.PresentToast('Tracking#: ' + this.trackingNumber + ' is successfully scanned', 'success');
-        this.eventLog = 'Tracking#: ' + this.trackingNumber + ' is successfully scanned' + '\n' + this.eventLog;
-        this.trackingNumber = '';
-        if (this.orderPackageList[0].itemQuantity == 0) {
-          this.isScanned = true;
-          this.orderPackageList[0].status = "Scanned";
-          this.updateOrder();
-        }
-      } else {
-        this.trackingNumber = '';
-        this.authService.PresentToast('All quantities are already scanned', 'danger');
-        this.eventLog = 'All quantities are already scanned' + '\n' + this.eventLog;
-      }
+  validateTrackingNo(item) {
+    if (item.trackingNo == item.trackingNumber) {
+      this.authService.PresentToast('Tracking#: ' + item.trackingNo + ' is successfully scanned', 'success');
+        this.eventLog = 'Tracking#: ' + item.trackingNo + ' is successfully scanned' + '\n' + this.eventLog;
+        item.trackingNo = '';
+        item.isScanned = true;
+        item.status = "Scanned";
     } else {
-      this.trackingNumber = '';
-      this.authService.PresentToast('Please enter valid UPC', 'danger');
-      this.eventLog = 'Please enter valid UPC' + '\n' + this.eventLog;
+      item.trackingNo = '';
+      this.authService.PresentToast('Please enter valid Tracking number', 'danger');
+      this.eventLog = 'Please enter valid Tracking number' + '\n' + this.eventLog;
+    }
+    let checkScanStatus = this.orderPackageList.filter(i => i.isScanned == false)
+    if(checkScanStatus.length == 0){
+      this.updateOrder();
     }
   }
 
@@ -86,9 +72,9 @@ export class TrackingPage implements OnInit {
     this.authService.requestServer(url, 'post', this.authService.packAppDetail).subscribe(res => {
       this.authService.dismiss();
       if (res['scanStatusEnum'] == 'Scanned') {
-        this.authService.PresentToast('Order successfully udpated', 'success');
-        this.eventLog = 'Order successfully udpated' + '\n' + this.eventLog;
-        this.router.navigate(['/packapp-menus']);
+        this.authService.PresentToast(res['popupMessage']['information'], 'success');
+        this.eventLog = res['popupMessage']['information'] + '\n' + this.eventLog;
+        this.router.navigate(['/singleitem-packapp']);
       } else {
         this.authService.PresentToast('Order is not updated', 'danger');
         this.eventLog = 'Order is not updated' + '\n' + this.eventLog;

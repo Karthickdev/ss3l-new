@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ApiserviceService } from '../services/auth.service';
 
@@ -8,7 +8,7 @@ import { ApiserviceService } from '../services/auth.service';
   styleUrls: ['./multi-item-pickapp.page.scss'],
 })
 export class MultiItemPickappPage implements OnInit {
-
+  @ViewChild('po', { static: false }) po;
   poNumber: any;
   itemDetails = [];
   upc: any;
@@ -18,10 +18,19 @@ export class MultiItemPickappPage implements OnInit {
   constructor(private router: Router, private authService: ApiserviceService) { }
 
   ngOnInit() {
+    setTimeout(()=>{
+      this.po.setFocus();
+    }, 400);
   }
 
   back() {
     this.router.navigate(['/pickapp-menus']);
+  }
+
+  handleScanner(){
+    setTimeout(()=>{
+      this.getMultiItem();
+    }, 300)
   }
 
   getMultiItem() {
@@ -36,6 +45,11 @@ export class MultiItemPickappPage implements OnInit {
       if (this.scanDetail['popupMessage']['error']) {
         this.authService.PresentToast(this.scanDetail['popupMessage']['error'], 'danger');
         this.eventLog = this.scanDetail['popupMessage']['error'] + '\n' + this.eventLog;
+        this.poNumber = '';
+        this.itemDetails = [];
+        setTimeout(()=>{
+          this.po.setFocus();
+        }, 400);
       } else {
         this.itemDetails = this.scanDetail['orderItemList']
         for (let item of this.itemDetails) {
@@ -106,10 +120,13 @@ export class MultiItemPickappPage implements OnInit {
     this.authService.requestServer(url, 'post', this.scanDetail).subscribe(res => {
       this.authService.dismiss();
       if (res['scanStatusEnum'] == 'Picked') {
-        this.authService.PresentToast('Order successfully udpated', 'success');
-        this.eventLog = 'Order successfully udpated' + '\n' + this.eventLog;
+        this.authService.PresentToast(res['popupMessage']['information'], 'success');
+        this.eventLog = res['popupMessage']['information'] + '\n' + this.eventLog;
         this.poNumber = '';
         this.itemDetails = [];
+        setTimeout(()=>{
+          this.po.setFocus();
+        }, 400);
       } else {
         this.authService.PresentToast('Order is not updated', 'danger');
         this.eventLog = 'Order is not updated' + '\n' + this.eventLog;
