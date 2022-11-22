@@ -18,7 +18,7 @@ export class PackappMenusPage implements OnInit {
   }
 
   gotosingleitemscan() {
-    this.router.navigate(['/singleitem-packapp']);
+    this.router.navigate(['/print']);
   }
 
   gotomultiitemscan() {
